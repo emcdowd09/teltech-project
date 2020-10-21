@@ -2,7 +2,7 @@
 FROM node:12 as frontend
 WORKDIR /app
 COPY package*.json ./
-COPY .env.template .env #dummy env file
+COPY .env.template .env
 RUN yarn install
 COPY . .
 RUN yarn build

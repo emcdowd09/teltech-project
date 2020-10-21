@@ -22,8 +22,7 @@ export default new Vuex.Store({
   },
   actions: {
   	getEmployeesList({commit}) {
-      const apiUrl = 'http://localhost:8080/employees.json'
-      const dockerDoUrl = 'http://157.230.191.121/employees.json'
+      const apiUrl = process.env.VUE_APP_API_URL as string
 
       //Get employees list
       axios.get(apiUrl).then((response) => {

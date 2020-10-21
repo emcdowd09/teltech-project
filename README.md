@@ -46,7 +46,7 @@ git clone https://github.com/emcdowd09/teltech-project
 yarn install
 ```
 
-3. Rename .env.template to .env and fill your env data if needed
+3. Rename .env.template to .env and fill your env data based on your configuration
 ```sh
 cp .env.template .env
 ```
