@@ -126,7 +126,8 @@ export default ({
         	search: '',
         	showDetailsModal: false,
         	detailsEmployee: null,
-        	showFilters: false
+        	showFilters: false,
+        	parallaxOffset: 420
         }
     },
     components: {
@@ -163,13 +164,29 @@ export default ({
         }
     },
     mounted() {
+    	console.log(screen.width)
+    	if(window.innerWidth > 1792) {
+    		this.parallaxOffset = 600
+    	} else if(window.innerWidth > 1536) {
+    		this.parallaxOffset = 500
+    	} else if(window.innerWidth > 1344) {
+    		this.parallaxOffset = 420
+    	} else if(window.innerWidth > 1025) {
+    		this.parallaxOffset = 320
+    	} else if(window.innerWidth > 1023) {
+    		this.parallaxOffset = 700
+    	} else if(window.innerWidth > 767) {
+    		this.parallaxOffset = 550
+    	} else if(window.innerWidth > 360) {
+    		this.parallaxOffset = 420
+    	}
     	//parallax effect
     	// @ts-ignore
     	const bodyController = new ScrollMagic.Controller()
     	// @ts-ignore
-    	const tween = new TimelineMax().add([TweenMax.to('#hero', 1, { backgroundPosition: '0 -60%', ease: Linear.ease })])
+    	const tween = new TimelineMax().add([TweenMax.to('#hero', 1, { backgroundPosition: '0 200px', ease: Linear.ease })])
     	// @ts-ignore
-    	new ScrollMagic.Scene({ triggerElement: '#hero', duration: '100%', offset: 600})
+    	new ScrollMagic.Scene({ triggerElement: '#hero', duration: '100%', offset: this.parallaxOffset})
     		.setTween(tween)
     		.addTo(bodyController)
     },
@@ -212,7 +229,7 @@ export default ({
 	@import "../assets/scss/variables";
 	#hero {
 	    width: 100%;
-	    height: 600px;
+	    height: 80vh;
 	    background-image: url('~@/assets/images/teltech-header.jpg');
 	    background-repeat: no-repeat;
 	    background-size: 100%;
@@ -229,6 +246,15 @@ export default ({
 		    letter-spacing: normal;
 		    color: $white;
 		    text-transform: uppercase;
+		}
+
+		//Ipad PRO
+		@media only screen and (max-width: 1026px) {
+			height: 400px;
+
+			h1 {
+			    font-size: 50px;
+			}
 		}
 
 		//Tablet
