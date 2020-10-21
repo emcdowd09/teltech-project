@@ -26,7 +26,7 @@
     justify-content: flex-start;
     flex-direction: column;
     width: 600px;
-    height: 800px;
+    height: auto;
     max-width: 90%;
     max-height: 90%;
     background: $white;
@@ -82,7 +82,7 @@
 
     //Mobile
     @media only screen and (max-width: 767px) {   
-        padding: 2.5%;
+        padding: 5%;
         width: 100%;
     }
 }

@@ -68,8 +68,7 @@ docker-compose up (-d for detached)
 
 <!-- Demo -->
 ## Demo
-Dockerized (nginx in dockerfile) - [http://157.230.191.121/](http://157.230.191.121/)
-Nginx - [http://157.230.223.20/](http://157.230.223.20/)
+Dockerized - [http://157.230.191.121/](http://157.230.191.121/)
 
 <!-- LICENSE -->
 ## License

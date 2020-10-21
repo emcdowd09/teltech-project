@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.162",
+    "@types/vue-clickaway": "^2.2.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
     "vue": "^2.6.11",
+    "vue-clickaway": "^2.2.2",
     "vue-i18n": "^8.17.3",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"

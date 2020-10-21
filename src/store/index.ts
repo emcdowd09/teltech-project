@@ -26,7 +26,7 @@ export default new Vuex.Store({
 
       //Get employees list
       axios.get(apiUrl).then((response) => {
-        if(result(response, 'data', false)) {
+        if(result(response, 'data', false) && Array.isArray(response.data)) {
           //set all employees
           commit('setEmployees', response.data)
         }

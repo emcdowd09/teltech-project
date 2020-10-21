@@ -19,7 +19,7 @@
 		            <path d="M24 1.414L22.586 0 12 10.586 1.414 0 0 1.414 10.586 12 0 22.586 1.414 24 12 13.414 22.586 24 24 22.586 13.414 12z"/>
 		        </svg>
 			</div>
-			<div class="filter-wrapper" @click="showFilters = !showFilters">
+			<div class="filter-wrapper" @click="showFilters = !showFilters" v-on-clickaway="hideFilters">
 				<svg class="down" xmlns="http://www.w3.org/2000/svg" width="20.551" height="10.728" viewBox="0 0 20.551 10.728">
 				    <g>
 				        <path fill="#ffc107" d="M19.8 117.408l-9.512 9.513-9.51-9.513a.447.447 0 0 0-.632.632l9.828 9.828a.447.447 0 0 0 .632 0l9.828-9.828a.447.447 0 1 0-.621-.643l-.011.011z" transform="translate(0 -117.272) translate(-.02)"/>
@@ -103,12 +103,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import { mixin as clickaway } from 'vue-clickaway';
 import Modal from '@/components/ModalComponent.vue'
 import Group from '@/components/Group.vue'
 import { Employee } from '@/store/interfaces/employee'
 import { filter } from 'lodash'
 export default ({
     name: 'List',
+    mixins: [ clickaway ],
     data () {
         return {
         	filters: {
@@ -136,28 +138,28 @@ export default ({
         	'getEmployees'
         ]),
         getExecutiveTeam() {
-        	return this.filterEmployees('executive_team')
+        	return this.filterEmployees('executive team')
         },
         getOperationsTeam() {
         	return this.filterEmployees('operations')
         },
         getProductTeam() {
-        	return this.filterEmployees('product_team')
+        	return this.filterEmployees('product team')
         },
         getMarketingTeam() {
-        	return this.filterEmployees('marketing_team')
+        	return this.filterEmployees('marketing team')
         },
         getDesignTeam() {
-        	return this.filterEmployees('design_team')
+        	return this.filterEmployees('design team')
         },
         getDevelopmentTeam() {
-        	return this.filterEmployees('development_team')
+        	return this.filterEmployees('development team')
         },
         getDataTeam() {
-        	return this.filterEmployees('data_team')
+        	return this.filterEmployees('data team')
         },
         getQATeam() {
-        	return this.filterEmployees('quality_assurance_team')
+        	return this.filterEmployees('quality assurance team')
         }
     },
     mounted() {
@@ -172,12 +174,16 @@ export default ({
     		.addTo(bodyController)
     },
     methods: {
+    	//filter by department and search string
     	filterEmployees(department: String) {
     		return filter(this.getEmployees, (employee: Employee) => {
                 if(employee.department === department && ( employee.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1 || employee.surname.toLowerCase().indexOf(this.search.toLowerCase()) !== -1 )) {
 	            	return employee
 	            } 
             })
+    	},
+    	hideFilters() {
+    		this.showFilters = false
     	},
      	getAvatar(img: String) {
     		if(img.length > 0) {
