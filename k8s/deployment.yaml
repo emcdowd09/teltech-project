@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: employees
-          image: xxx
+          image: image_name
           resources:
             limits:
               memory: "512Mi"
