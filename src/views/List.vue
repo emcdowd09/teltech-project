@@ -20,7 +20,7 @@
 		        </svg>
 			</div>
 			<div class="filter-wrapper" @click="showFilters = !showFilters" v-on-clickaway="hideFilters">
-				<svg class="down" xmlns="http://www.w3.org/2000/svg" width="20.551" height="10.728" viewBox="0 0 20.551 10.728">
+				<svg :class="['down', { 'up' : showFilters}]" xmlns="http://www.w3.org/2000/svg" width="20.551" height="10.728" viewBox="0 0 20.551 10.728">
 				    <g>
 				        <path fill="#ffc107" d="M19.8 117.408l-9.512 9.513-9.51-9.513a.447.447 0 0 0-.632.632l9.828 9.828a.447.447 0 0 0 .632 0l9.828-9.828a.447.447 0 1 0-.621-.643l-.011.011z" transform="translate(0 -117.272) translate(-.02)"/>
 				        <path fill="#383838" d="M10.269 128a.447.447 0 0 1-.316-.13l-9.828-9.828a.447.447 0 0 1 .632-.632l9.513 9.512 9.512-9.513a.447.447 0 0 1 .643.621l-.011.011-9.828 9.828a.447.447 0 0 1-.317.131z" transform="translate(0 -117.272) translate(0 -.001)"/>
@@ -29,48 +29,51 @@
 				<span>{{ $t('filter_by_department') }}</span>
 				<div :class="['filters-list', { 'show-filters' : showFilters }]">
 					<input type="checkbox" class="checkbox" v-model="filters.executiveTeam" id="executives">
-					<label for="executives" v-if="getExecutiveTeam.length > 0">
+					<label for="executives">
 						Executive Team ({{getExecutiveTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.operationsTeam" id="operations">
-					<label for="operations" v-if="getOperationsTeam.length > 0">
+					<label for="operations">
 						Operations Team ({{getOperationsTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.productTeam" id="product">
-					<label for="product" v-if="getProductTeam.length > 0">
+					<label for="product">
 						Product Team ({{getProductTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.marketingTeam" id="marketing">
-					<label for="marketing" v-if="getMarketingTeam.length > 0">
+					<label for="marketing">
 						Marketing Team ({{getMarketingTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.designTeam" id="design">
-					<label for="design" v-if="getDesignTeam.length > 0">
+					<label for="design">
 						Design Team ({{getDesignTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.developmentTeam" id="development">
-					<label for="development" v-if="getDevelopmentTeam.length > 0">
+					<label for="development">
 						Development Team ({{getDevelopmentTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.dataTeam" id="data">
-					<label for="data" v-if="getDataTeam.length > 0">
+					<label for="data">
 						Data Team ({{getDataTeam.length}})
 					</label>
 
 					<input type="checkbox" class="checkbox" v-model="filters.qaTeam" id="qa">
-					<label for="qa" v-if="getQATeam.length > 0">
+					<label for="qa">
 						QA Team ({{getQATeam.length}})
 					</label>
 				</div>
 			</div>
 		</div>
 		<div class="hr"></div>
+		<div class="no-data empty-filters" v-if="emptyResults()">
+			<p>{{ $t('sorry_no_results') }}</p>
+		</div>
 		<div class="employees-wrapper">
 			<group :list="getExecutiveTeam" :title="'Executive Team'" @employee="showDetails" v-if="getExecutiveTeam.length > 0 && filters.executiveTeam"></group>
 			<group :list="getOperationsTeam" :title="'Operations Team'" @employee="showDetails" v-if="getOperationsTeam.length > 0 && filters.operationsTeam"></group>
@@ -83,7 +86,7 @@
 		</div>
 	</div>
 	<div class="no-data" v-else>
-		<p>Unfortunately, there has been an error fetching employees. Please refresh the page.</p>
+		<p>{{ $t('error_fetching') }}</p>
 	</div>
 
 	<!-- Details Modal -->
@@ -127,7 +130,7 @@ export default ({
         	showDetailsModal: false,
         	detailsEmployee: null,
         	showFilters: false,
-        	parallaxOffset: 420
+        	parallaxOffset: 0
         }
     },
     components: {
@@ -164,23 +167,13 @@ export default ({
         }
     },
     mounted() {
-    	console.log(screen.width)
-    	if(window.innerWidth > 1792) {
-    		this.parallaxOffset = 600
-    	} else if(window.innerWidth > 1536) {
-    		this.parallaxOffset = 500
-    	} else if(window.innerWidth > 1344) {
-    		this.parallaxOffset = 420
-    	} else if(window.innerWidth > 1025) {
-    		this.parallaxOffset = 320
-    	} else if(window.innerWidth > 1023) {
-    		this.parallaxOffset = 700
-    	} else if(window.innerWidth > 767) {
-    		this.parallaxOffset = 550
-    	} else if(window.innerWidth > 360) {
-    		this.parallaxOffset = 420
-    	}
     	//parallax effect
+    	//initial parallax offset calculation
+    	this.calculateParallax()
+
+    	//resize calculate offset again
+    	window.addEventListener('resize', this.calculateParallax())
+    	
     	// @ts-ignore
     	const bodyController = new ScrollMagic.Controller()
     	// @ts-ignore
@@ -198,6 +191,28 @@ export default ({
 	            	return employee
 	            } 
             })
+    	},
+    	calculateParallax() {
+    		if(window.innerWidth > 1792) {
+	    		this.parallaxOffset = 600
+	    	} else if(window.innerWidth > 1536) {
+	    		this.parallaxOffset = 500
+	    	} else if(window.innerWidth > 1344) {
+	    		this.parallaxOffset = 420
+	    	} else if(window.innerWidth > 1025) {
+	    		this.parallaxOffset = 320
+	    	} else if(window.innerWidth > 1023) {
+	    		this.parallaxOffset = 700
+	    	} else if(window.innerWidth > 767) {
+	    		this.parallaxOffset = 550
+	    	} else if(window.innerWidth > 360) {
+	    		this.parallaxOffset = 420
+	    	}
+    	},
+    	emptyResults() {
+    		if(Object.values(this.filters).every(o => o === false) || (this.getExecutiveTeam.length == 0  && this.getOperationsTeam.length == 0 && this.getProductTeam.length == 0 && this.getMarketingTeam.length == 0 && this.getDesignTeam.length == 0 && this.getDevelopmentTeam.length == 0 && this.getDataTeam.length == 0 && this.getQATeam.length == 0)) {
+    			return true
+    		}
     	},
     	hideFilters() {
     		this.showFilters = false
@@ -338,6 +353,10 @@ export default ({
 					margin-right: 0px;
 					margin-left: 20px;
 				}
+
+				&.up {
+					transform: rotateX(180deg);
+				}
 			}
 
 		  	input, span {
@@ -425,6 +444,10 @@ export default ({
 				width: 90%;
 				text-align: center;
 			}
+		}
+
+		&.empty-filters {
+			min-height: 300px;
 		}
 	}
 

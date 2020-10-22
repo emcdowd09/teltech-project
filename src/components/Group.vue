@@ -1,7 +1,7 @@
 <template>
     <div class="group">
-        <h2>{{ title }} {{ total }}</h2>
-        <div class="employees-list" v-if="list.length > 0">
+        <h2>{{ title }}</h2>
+        <div class="employees-list">
             <div class="employee" v-for="employee in list" @click="$emit('employee', employee)">
                 <div class="flex">
                     <div class="avatar" :style="{ backgroundImage: 'url(' + getAvatar(employee.image) + ')' }"></div>
@@ -14,9 +14,6 @@
                 <span class="employee-intro">{{ employee.intro }}</span>
             </div>
         </div>
-        <div class="no-data" v-else>
-            <p>{{ $t('sorry_no_results') }}</p>
-        </div>
     </div>
 </template>
 
@@ -26,8 +23,7 @@ export default Vue.extend({
     name: 'Group',
     props: {
         list: Array,
-        title: String,
-        total: String
+        title: String
     },
     methods: {
         getAvatar(img: String) {

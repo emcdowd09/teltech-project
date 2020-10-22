@@ -4,5 +4,6 @@
   	"this_is_who": "Ovo smo mi",
   	"search_employees": "Traži Zaposlenike",
   	"filter_by_department": "Filter po odjelu",
-  	"sorry_no_results": "Nema rezultata koji odgovaraju filteru. Molimo upišite drugo ime."
+  	"sorry_no_results": "Nema rezultata koji odgovaraju filteru.",
+  	"error_fetching": "Dogodila se pogreška pri dohvaćanju liste zaposlenika. Molimo osvježite stranicu."
 }
